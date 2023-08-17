@@ -9,13 +9,13 @@
 ### 2023-02
 
 ## Integrantes
-- [Nome do integrante 1 e link do portifólio](https://github.com/carlosrafaelgn/)
-- [Nome do integrante 2 e link do portifólio](https://github.com/carlosrafaelgn/)
-- [Nome do integrante 3 e link do portifólio](https://github.com/carlosrafaelgn/)
+- [Giovanna Caroline Sanches Ferreira](https://github.com/gihferreir4)
+- [Guilherme Martins Macedo](https://github.com/gmacedo16)
+- [Luiz Gustavo da Silva Candido](https://github.com/gustavo-candidoo)
 
 ## Descrição do Projeto
 
-Descrição do projeto, incluindo o problema original, e o objetivo final. Pode ser em mais de um parágrafo.
+Projeto de acesso de controle de pessoas usando sensor RFID ligado à um node MCU se conectando com mySQL Server e PHP.
 
 # Detalhes de Configuração
 
