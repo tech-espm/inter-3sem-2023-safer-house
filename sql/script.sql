@@ -1,10 +1,9 @@
-
 CREATE DATABASE IF NOT EXISTS inter DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_0900_ai_ci;
 USE inter;
 
 CREATE TABLE pessoa (
   id_pessoa  int NOT NULL AUTO_INCREMENT,
-  nome varchar(20) NOT NULL,
+  nome varchar(100) NOT NULL,
   PRIMARY KEY (id_pessoa)
 );
 
