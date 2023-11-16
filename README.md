@@ -38,9 +38,6 @@ mysqlpassword=[SENHA DO USUÁRIO DO BANCO]
 mysqldatabase=[NOME DO BANCO]
 ```
 
-- A pasta `dados` deve ser criada em `/`
-- A pasta `imagens` dee ser criada em `/dados`
-
 # Licença
 
 Este projeto é licenciado sob a [MIT License](https://github.com/tech-espm/inter-3sem-2023-safer-house/blob/main/LICENSE).

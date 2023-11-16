@@ -63,9 +63,12 @@
 	async function atualizarDados() {
 		waitSwal();
 
+		const dataInicial = document.getElementById("dataInicial").value; 
+		const dataFinal = document.getElementById("dataFinal").value; 
+
 		try {
 
-			let response = await fetch("/obterDados");
+			let response = await fetch(`/obterDados?dataInicial=${dataInicial}&dataFinal=${dataFinal}`);
 
 			if (response.ok) {
 
@@ -74,7 +77,7 @@
 				let div = document.getElementById("div-grafico");
 				div.innerHTML = '<canvas id="grafico-barras" style="height: 50vh;"></canvas>';
 
-				let labels = [], data = [];
+				let ultimoDia = null, labels = [], entradas = [], saidas = [];
 
 				let dados = await response.json();
 				if (!dados || !dados.length) {
@@ -83,21 +86,44 @@
 				}
 
 				for (let i = 0; i < dados.length; i++) {
-					labels.push(dados[i].dia);
-					data.push(dados[i].valor);
+					if (ultimoDia != dados[i].dia) {
+						ultimoDia = dados[i].dia;
+						labels.push(dados[i].dia);
+
+						if (entradas.length < saidas.length) {
+							entradas.push(0);
+						} else if (saidas.length < entradas.length) {
+							saidas.push(0);
+						}
+					}
+
+					if (dados[i].entrada) {
+						entradas.push(dados[i].total);
+					} else {
+						saidas.push(dados[i].total);
+					}
 				}
 
 				let grafico = new Chart(document.getElementById("grafico-barras"), {
 					type: "bar",
 					data: {
 						labels: labels,
-						datasets: [{
-							label: "Valor",
-							backgroundColor: "#4e73df",
-							hoverBackgroundColor: "#2e59d9",
-							borderColor: "#4e73df",
-							data: data,
-						}],
+						datasets: [
+						{
+								label: "Entradas",
+								backgroundColor: "#4e73df",
+								hoverBackgroundColor: "#2e59d9",
+								borderColor: "#4e73df",
+								data: entradas,
+							},
+							{
+								label: "Saídas",
+								backgroundColor: "#df734e",
+								hoverBackgroundColor: "#d9592e",
+								borderColor: "#df734e",
+								data: saidas,
+							},
+						],
 					},
 					options: {
 						maintainAspectRatio: false,

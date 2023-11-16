@@ -33,3 +33,9 @@ html, body {
 	color: white;
 	text-decoration: none;
 }
+
+.p {
+	margin: 0px;
+	padding: 2rem;
+	max-width: fit-content;
+}

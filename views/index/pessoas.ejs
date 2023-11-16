@@ -1,18 +1,38 @@
 ﻿<div class="container-fluid">
 
 	<h1 class="my-5">
-		Relatório por Pessoa
+		Safer House
 	</h1>
 	
 	<div class="row">
-		<div class="col-sm-4 pb-4">
+		<div class="col-sm-8 pb-4">
 
 			<div class="card shadow">
 				<div class="card-body">
 					<form id="form">
 						<div class="form-group">
-							<label for="data">Data</label>
-							<input id="data" name="data" class="form-control" type="date" value="<%= ano %>-<%= mes %>-<%= dia %>" />
+							<label for="id_pessoa">Pessoa</label>
+							<select id="id_pessoa" name="id_pessoa" class="form-control">
+								<% for (let i = 0; i < pessoas.length; i++) { %>
+									<option value="<%= pessoas[i].id_pessoa %>"><%= pessoas[i].nome %></option>
+								<% } %>
+							</select>
+						</div>
+
+						<div class="row">
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="dataInicial">Data Inicial</label>
+									<input id="dataInicial" name="dataInicial" class="form-control" type="date" value="<%= anoInicial %>-<%= mesInicial %>-<%= diaInicial %>" />
+								</div>
+							</div>
+
+							<div class="col-sm-6">
+								<div class="form-group">
+									<label for="dataFinal">Data Final</label>
+									<input id="dataFinal" name="dataFinal" class="form-control" type="date" value="<%= anoFinal %>-<%= mesFinal %>-<%= diaFinal %>" />
+								</div>
+							</div>
 						</div>
 
 						<button type="submit" class="btn btn-primary">Listar</button>
@@ -51,9 +71,13 @@
 	async function atualizarDados() {
 		waitSwal();
 
+		const id_pessoa = document.getElementById("id_pessoa").value;
+		const dataInicial = document.getElementById("dataInicial").value;
+		const dataFinal = document.getElementById("dataFinal").value; 
+
 		try {
 
-			let response = await fetch("/obterDados");
+			let response = await fetch(`/obterDados?id_pessoa=${id_pessoa}&dataInicial=${dataInicial}&dataFinal=${dataFinal}`);
 
 			if (response.ok) {
 
@@ -62,7 +86,7 @@
 				let div = document.getElementById("div-grafico");
 				div.innerHTML = '<canvas id="grafico-barras" style="height: 50vh;"></canvas>';
 
-				let labels = [], data = [];
+				let ultimoDia = null, labels = [], entradas = [], saidas = [];
 
 				let dados = await response.json();
 				if (!dados || !dados.length) {
@@ -71,21 +95,44 @@
 				}
 
 				for (let i = 0; i < dados.length; i++) {
-					labels.push(dados[i].dia);
-					data.push(dados[i].valor);
+					if (ultimoDia != dados[i].dia) {
+						ultimoDia = dados[i].dia;
+						labels.push(dados[i].dia);
+
+						if (entradas.length < saidas.length) {
+							entradas.push(0);
+						} else if (saidas.length < entradas.length) {
+							saidas.push(0);
+						}
+					}
+
+					if (dados[i].entrada) {
+						entradas.push(dados[i].total);
+					} else {
+						saidas.push(dados[i].total);
+					}
 				}
 
 				let grafico = new Chart(document.getElementById("grafico-barras"), {
 					type: "bar",
 					data: {
 						labels: labels,
-						datasets: [{
-							label: "Valor",
-							backgroundColor: "#4e73df",
-							hoverBackgroundColor: "#2e59d9",
-							borderColor: "#4e73df",
-							data: data,
-						}],
+						datasets: [
+						{
+								label: "Entradas",
+								backgroundColor: "#4e73df",
+								hoverBackgroundColor: "#2e59d9",
+								borderColor: "#4e73df",
+								data: entradas,
+							},
+							{
+								label: "Saídas",
+								backgroundColor: "#df734e",
+								hoverBackgroundColor: "#d9592e",
+								borderColor: "#df734e",
+								data: saidas,
+							},
+						],
 					},
 					options: {
 						maintainAspectRatio: false,
