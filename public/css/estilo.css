@@ -39,3 +39,11 @@ html, body {
 	padding: 2rem;
 	max-width: fit-content;
 }
+ 
+.navbar-brand, .nav-link {
+    color: #0019fc;
+
+}
+.container-custom {
+    background-color:rgb(181, 21, 21);
+} 
