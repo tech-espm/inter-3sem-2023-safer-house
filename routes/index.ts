@@ -1,5 +1,7 @@
 ﻿import app = require("teem");
 
+
+
 class IndexRoute {
 	public async index(req: app.Request, res: app.Response) {
 		let hoje = new Date();
@@ -34,7 +36,7 @@ class IndexRoute {
 				ORDER BY nome;
 			`);
 		});
-
+	
 		let hoje = new Date();
 
 		let mesFinal = hoje.getMonth() + 1;
@@ -67,6 +69,13 @@ class IndexRoute {
 		};
 
 		res.render("index/sobre", opcoes);
+	}
+	public async historia(req: app.Request, res: app.Response) {
+		let opcoes = {
+			titulo: "Nossa trajetória"
+		};
+
+		res.render("index/historia", opcoes);
 	}
 
 	public async obterDados(req: app.Request, res: app.Response) {
@@ -106,9 +115,10 @@ class IndexRoute {
 		res.json(dados);
 	}
 
+	@app.http.post()
 	public async logar(req: app.Request, res: app.Response) {
-		let id_pessoa = parseInt(req.query["id_pessoa"] as string);
-		let entrada = parseInt(req.query["entrada"] as string);
+		let id_pessoa = parseInt(req.body["id_pessoa"] as string);
+		let entrada = parseInt(req.body["entrada"] as string);
 
 		if (!id_pessoa || (entrada != 0 && entrada != 1)) {
 			res.status(400).json("Dados inválidos");
